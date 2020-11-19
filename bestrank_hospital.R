@@ -14,12 +14,17 @@ rename(
 )
 
 best <- function(state, outcome) {
+  ## Contain state and outcome value input from function into x and y
+  x <- state
+  y <- outcome
+  
   ## Read outcome data
   data <- new_outcome
+  
   ## Check that state and outcome are valid
   data %>% filter(
-    state %in% state %>% view()
-  )
+    State %in% x
+  ) %>% view()
   ## Return hospital name in that state with lowest 30-day death
   ## rate
 }
