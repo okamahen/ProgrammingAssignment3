@@ -26,7 +26,17 @@ best <- function(state, outcome) {
                   County.Name, Phone.Number,
                   contains(y)) %>% filter(
     State %in% x
-  ) %>% view()
+  ) %>% drop_na()
+
+  fin <- res %>% group_by(
+      res[,2],
+      res[,3],
+      res[,4]
+  ) %>% summarise(
+        best = min(res[,8])
+  )
+       
+  print(fin)
   ## Return hospital name in that state with lowest 30-day death
   ## rate
 }
