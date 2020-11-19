@@ -21,8 +21,10 @@ best <- function(state, outcome) {
   ## Read outcome data
   data <- new_outcome
   
-  ## Check that state and outcome are valid
-  data %>% filter(
+  ## Check that state and outcome are valid, add view() for test
+  data %>% select(Provider.Number, Hospital.Name, Address.1, City, State,
+                  County.Name, Phone.Number,
+                  contains(y)) %>% filter(
     State %in% x
   ) %>% view()
   ## Return hospital name in that state with lowest 30-day death
