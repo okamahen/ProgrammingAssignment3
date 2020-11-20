@@ -28,14 +28,20 @@ best <- function(state, outcome) {
     State %in% x
   ) %>% drop_na()
 
-  ## Find minimum value for selected outcome
-  min_val = min(res[,8], na.rm = TRUE)
-  
-  ## Filter data based on minimum value
-  fin <- filter(res, res[,8] == min_val)
-  
-  ## Return hospital name in choosen state with lowest 30-day death
-  ## rate
-  view(fin)
+  if(nrow(test2) > 0) {
+    message("state and outcome input correct, parsing data")
+    
+    ## Find minimum value for selected outcome
+    min_val = min(res[,8], na.rm = TRUE)
+    
+    ## Filter data based on minimum value
+    fin <- filter(res, res[,8] == min_val)
+    
+    ## Return hospital name in choosen state with lowest 30-day death
+    ## rate
+    view(fin)
+  } else {
+    message("Wrong input, please re-check your input")
+  }
   
 }
