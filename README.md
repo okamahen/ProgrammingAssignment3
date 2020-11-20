@@ -1,2 +1,2 @@
 # ProgrammingAssignment3
-Repository for R Programming Course , John Hopkins University
+Repository for Programming Assignment 3, R Programming on Coursera - John Hopkins University
