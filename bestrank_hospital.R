@@ -21,24 +21,23 @@ best <- function(state, outcome) {
   ## Read outcome data
   data <- new_outcome
   
-  ## Check that state and outcome are valid, add view() for test
-  data %>% select(Provider.Number, Hospital.Name, Address.1, City, State,
+  ## 
+  res <- data %>% select(Provider.Number, Hospital.Name, Address.1, City, State,
                   County.Name, Phone.Number,
                   contains(y)) %>% filter(
     State %in% x
   ) %>% drop_na()
 
-  fin <- res %>% group_by(
-      res[,2],
-      res[,3],
-      res[,4]
-  ) %>% summarise(
-        best = min(res[,8])
-  )
-       
-  print(fin)
-  ## Return hospital name in that state with lowest 30-day death
+  ## Find minimum value for selected outcome
+  min_val = min(res[,8], na.rm = TRUE)
+  
+  ## Filter data based on minimum value
+  fin <- filter(res, res[,8] == min_val)
+  
+  ## Return hospital name in choosen state with lowest 30-day death
   ## rate
+  view(fin)
+  
 }
 
 
@@ -48,4 +47,3 @@ rankhospital <- function(state, outcome, num = "best") {
   ## Return hospital name in that state with the given rank
   ## 30-day death rate
 }
-
