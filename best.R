@@ -5,7 +5,7 @@
 ## hist(outcome[, 11])
 
 ## Data Preparation : read csv data and input data environment with name "hdata" and "outcome"
-new_outcome <- outcome %>% select(Provider.Number, Hospital.Name, Address.1, City, State, County.Name, Phone.Number, starts_with("Hospital.30.Day.Death"))
+new_outcome <- outcome %>% select(Provider.Number, Hospital.Name, Address.1, City, viewState, County.Name, Phone.Number, starts_with("Hospital.30.Day.Death"))
 new_outcome <- new_outcome %>%
 rename(
   Heart_Attack = Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack,
@@ -27,8 +27,12 @@ best <- function(state, outcome) {
                   contains(y)) %>% filter(
     State %in% x
   ) %>% drop_na()
-
-  if(nrow(test2) > 0) {
+  
+  checkState <- nrow(res)
+  checkOutcome <- select(new_outcome, contains(y)) %>% ncol()
+  
+  
+  if(checkState && checkOutcome > 0) {
     message("state and outcome input correct, parsing data")
     
     ## Find minimum value for selected outcome
