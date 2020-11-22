@@ -45,7 +45,7 @@ best <- function(state, outcome) {
     ## rate
     view(fin)
   } else {
-    message("Wrong input, please re-check your input")
+    message("Wrong input, please re-check state and outcome input!")
   }
   
 }
