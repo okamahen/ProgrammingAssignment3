@@ -17,22 +17,28 @@ res <- data %>% select(Provider.Number, Hospital.Name, Address.1, City, State,
     State %in% x
     ) %>% drop_na()
 
-## Target column for rank
+## Target column 8 (ratio) for rank
 target <- res[,8]
 
-## Calculate rank using dense_rank() from dplyr
+## Calculate rank using dense_rank() and add new column using mutate()
 rankVal <- res %>% mutate(
      rank = dense_rank(target)
 )
 
 ## Create variable to catch num input, contains : "worst", "best", or integer
 rankSelector <- if(num == "best"){
-  sel <- min(res[,9])
+  sel <- min(rankVal[,9])
 } else if(num == "worst"){
-  sel <- max(res[,9])
+  sel <- max(rankVal[,9])
 } else {
   sel <- num
 }
+
+fin <- rankVal %>% filter(
+  rankVal$rank == rankSelector
+)
+
+view(fin)
 
 ## Return hospital name in that state with the given rank
 ## 30-day death rate
