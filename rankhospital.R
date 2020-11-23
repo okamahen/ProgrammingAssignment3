@@ -5,8 +5,7 @@ rankhospital <- function(state, outcome, num = "best") {
 ## Contain state and outcome value input from function into x, y, and z
 x <- state
 y <- outcome
-z <- num
-  
+
 ## Read outcome data
 data <- new_outcome
   
