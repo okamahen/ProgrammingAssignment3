@@ -17,7 +17,7 @@ rankall <- function(outcome, num = "best") {
   names(res)[8] <- "dd_ratio"
   
   ## Creating rank with ave() function, source https://stat.ethz.ch/pipermail/r-help/2005-June/073031.html
-  res$g_rank <- ave(res$dd_ratio, res$State, FUN = dense_rank)
+  res$dd_rank <- ave(res$dd_ratio, res$State, FUN = dense_rank)
   
   ## Grouping with state and g_rank column
   res <- res %>% group_by(State, dd_rank) %>% arrange(dd_rank, .by_group = TRUE)
