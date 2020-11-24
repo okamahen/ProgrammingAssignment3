@@ -16,28 +16,19 @@ rankall <- function(outcome, num = "best") {
   ## Target column 8 (ratio) for rank
   target <- res[,8]
   
+  ## Create variable to catch num input, contains : "worst", "best", or integer
+
+  
   ## Calculate rank using dense_rank() and add new column using mutate()
   rankVal <- res %>% mutate(
-    rank = dense_rank(target)
-  )
-  
-  ## Create variable to catch num input, contains : "worst", "best", or integer
-  rankSelector <- if(num == "best"){
-    sel <- min(rankVal[,9])
-  } else if(num == "worst"){
-    sel <- max(rankVal[,9])
-  } else {
-    sel <- num
-  }
+    nrank = dense_rank(target)
+  ) %>% arrange(nrank)
   
   ## Create variable to contain result from filter() process
-  fin <- rankVal %>% filter(
-    rankVal$rank == rankSelector
-  )
   
   ## Return hospital name in that state with the given rank
   ## 30-day death rate
-  view(fin)
+  view(rankVal)
   
   
   ## Read outcome data
