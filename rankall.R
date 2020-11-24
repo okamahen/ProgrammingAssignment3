@@ -13,22 +13,22 @@ rankall <- function(outcome, num = "best") {
                          County.Name, Phone.Number,
                          contains(y)) %>% drop_na()
   
-  ## Target column 8 (ratio) for rank
-  target <- res[,8]
+  ## rename() cannot work, use base function name() to rename column 8
+  names(res)[8] <- "dd_ratio"
+  
+  ## Creating rank with ave() function, source https://stat.ethz.ch/pipermail/r-help/2005-June/073031.html
+  res$g_rank <- ave(res$dd_ratio, res$State, FUN = dense_rank)
+  
+  ## Grouping with state and g_rank column
+  res <- res %>% group_by(State, dd_rank) %>% arrange(dd_rank, .by_group = TRUE)
   
   ## Create variable to catch num input, contains : "worst", "best", or integer
 
   
-  ## Calculate rank using dense_rank() and add new column using mutate()
-  rankVal <- res %>% mutate(
-    nrank = dense_rank(target)
-  ) %>% arrange(nrank)
-  
-  ## Create variable to contain result from filter() process
   
   ## Return hospital name in that state with the given rank
   ## 30-day death rate
-  view(rankVal)
+  view(res)
   
   
   ## Read outcome data
