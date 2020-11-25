@@ -14,26 +14,38 @@ rankall <- function(outcome, num = "best") {
                          contains(y)) %>% drop_na()
   
   ## rename() cannot work, use base function name() to rename column 8
+  ## dd_ratio = 30-days disease death ratio
   names(res)[8] <- "dd_ratio"
   
   ## Creating rank with ave() function, source https://stat.ethz.ch/pipermail/r-help/2005-June/073031.html
   res$dd_rank <- ave(res$dd_ratio, res$State, FUN = dense_rank)
   
-  ## Grouping with state and g_rank column
+  ## Grouping with state and dd_rank column
   res <- res %>% group_by(State, dd_rank) %>% arrange(dd_rank, .by_group = TRUE)
   
   ## Create variable to catch num input, contains : "worst", "best", or integer
-
+  rankSelector <- if(num == "best"){
+    min(res$dd_rank, na.rm = TRUE)
+  } else if(num == "worst"){
+    max(res$dd_rank, na.rm = TRUE)
+  } else {
+    num
+  }
   
+  ## Create variable to contain result from filter() process
+  fin <- res %>% filter(
+    dd_rank == rankSelector
+  )
   
   ## Return hospital name in that state with the given rank
   ## 30-day death rate
-  view(res)
+  view(fin)
   
+  ## Return value to check on head or tails
+  return(fin)
   
-  ## Read outcome data
-## Check that state and outcome are valid
-## For each state, find the hospital of the given rank
-## Return a data frame with the hospital names and the
-## (abbreviated) state name
+  # Message configuration info to user
+  message(sprintf("Current outcome : %s", y))
+  message(sprintf("Current Rank : %s", rankSelector))
+  
 }
