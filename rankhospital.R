@@ -17,28 +17,37 @@ res <- data %>% select(Provider.Number, Hospital.Name, Address.1, City, State,
     ) %>% drop_na()
 
 ## Target column 8 (ratio) for rank
-target <- res[,8]
+names(res)[8] <- "dd_ratio"
+## target <- res[,8]
+
+## Creating rank with ave() function, source https://stat.ethz.ch/pipermail/r-help/2005-June/073031.html
+res$dd_rank <- ave(res$dd_ratio, res$State, FUN = dense_rank)
+
+res <- res %>% mutate(
+  true_rank = rank(dd_rank, ties.method = "last")
+) %>% arrange(Hospital.Name)
 
 ## Calculate rank using dense_rank() and add new column using mutate()
-rankVal <- res %>% mutate(
-     rank = dense_rank(target)
-)
+#rankVal <- res %>% mutate(
+#     rank = dense_rank(target)
+#)
 
 ## Create variable to catch num input, contains : "worst", "best", or integer
 rankSelector <- if(num == "best"){
-  sel <- min(rankVal[,9])
+  min(res$dd_rank)
 } else if(num == "worst"){
-  sel <- max(rankVal[,9])
+  max(res$dd_rank)
 } else {
-  sel <- num
+  num
 }
 
-fin <- rankVal %>% filter(
-  rankVal$rank == rankSelector
+## Create variable to contain result from filter() process
+fin <- res %>% filter(
+  true_rank == rankSelector
 )
-
-view(fin)
 
 ## Return hospital name in that state with the given rank
 ## 30-day death rate
+view(fin)
+
 }
